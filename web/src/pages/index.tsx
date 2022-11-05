@@ -5,8 +5,7 @@ interface HomeProps {
 export default function Home(props: HomeProps) {
   return (
     <div>
-      <h1>Hello NLW</h1>
-      <p>{props.count}</p>
+      <h1 className="text-violet-500 font-bold text-xl">Contagem: {props.count}</h1>
     </div>
   )
 }
