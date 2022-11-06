@@ -6,17 +6,15 @@ import iconCheck from '../assets/icon-check.svg'
 import { http } from '../lib/axios'
 import { FormEvent, useState } from 'react'
 
-interface HomeProps {
+interface CountersModel {
   poolsCount: number;
   usersCount: number;
   guessesCount: number;
 }
 
-export default function Home(props: HomeProps) {
+export default function Home(props: CountersModel) {
   const [poolTitle, setPoolTitle] = useState('')
-  const [poolsCount, setPoolsCount] = useState(props.poolsCount)
-  const [usersCount, setUsersCount] = useState(props.usersCount)
-  const [guessesCount, setGuessesCount] = useState(props.guessesCount)
+  const [counters, setCounters] = useState<CountersModel>(props)
 
   async function createPool(event: FormEvent) {
     event.preventDefault()
@@ -27,9 +25,9 @@ export default function Home(props: HomeProps) {
       })
 
       const counters = await fetchData()
-      setPoolsCount(counters?.poolsCount)
-      setUsersCount(counters?.usersCount)
-      setGuessesCount(counters?.guessesCount)
+      if (counters) {
+        setCounters(counters)
+      }
 
       const { code } = response.data
       await navigator.clipboard.writeText(code)
@@ -54,7 +52,7 @@ export default function Home(props: HomeProps) {
         <div className="mt-10 flex items-center gap-2 ">
           <Image src={usersAvatarExampleImage} alt="" />
           <strong className="text-grey-100 text-xl">
-            <span className="text-ignite-500">+{usersCount}</span> pessoas já estão usando
+            <span className="text-ignite-500">+{counters.usersCount}</span> pessoas já estão usando
           </strong>
         </div>
 
@@ -83,7 +81,7 @@ export default function Home(props: HomeProps) {
           <div className="flex items-center gap-6">
             <Image src={iconCheck} alt="" />
             <div className="flex flex-col">
-              <span className="font-bold text-2xl">+{poolsCount}</span>
+              <span className="font-bold text-2xl">+{counters.poolsCount}</span>
               <span>Bolões criados</span>
             </div>
           </div>
@@ -91,7 +89,7 @@ export default function Home(props: HomeProps) {
           <div className="flex items-center gap-6">
             <Image src={iconCheck} alt="" />
             <div className="flex flex-col">
-              <span className="font-bold text-2xl">+{guessesCount}</span>
+              <span className="font-bold text-2xl">+{counters.guessesCount}</span>
               <span>Palpites enviados</span>
             </div>
           </div>
@@ -103,7 +101,7 @@ export default function Home(props: HomeProps) {
   )
 }
 
-async function fetchData() {
+async function fetchData(): Promise<CountersModel | null> {
   try {
     const [poolsCountResponse, guessesCountResponse, usersCountResponse] = await Promise.all([
       http.get('/pools/count'),
@@ -123,12 +121,21 @@ async function fetchData() {
 }
 
 export const getStaticProps = async () => {
+  const props: CountersModel = {
+    poolsCount: 0,
+    usersCount: 0,
+    guessesCount: 0
+  }
+
   const counters = await fetchData()
+  if (counters) {
+    props.poolsCount = counters.poolsCount
+    props.usersCount = counters.usersCount
+    props.guessesCount = counters.guessesCount
+  }
 
   return {
-    props: {
-      ...counters
-    },
+    props,
     // Next.js will attempt to re-generate the page:
     // - When a request comes in
     // - At most once every 600 seconds
