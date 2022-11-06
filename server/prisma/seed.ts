@@ -5,9 +5,9 @@ const prisma = new PrismaClient()
 async function main() {
   const user = await prisma.user.create({
     data: {
-      name:'John Doe',
+      name: 'John Doe',
       email: 'john.doe@gmail.com',
-      avatarUrl: 'github.com/edsonboldrini.png',      
+      avatarUrl: 'github.com/edsonboldrini.png',
     }
   })
 
@@ -39,7 +39,7 @@ async function main() {
             connect: {
               userId_poolId: {
                 userId: user.id,
-                poolId: pool.id, 
+                poolId: pool.id,
               }
             }
           }
