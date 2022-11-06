@@ -48,7 +48,7 @@ async function bootstrap() {
     await prisma.pool.create({
       data: {
         title,
-        code
+        code,
       }
     })
 
