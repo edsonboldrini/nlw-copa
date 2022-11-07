@@ -4,7 +4,7 @@ import { useFonts, Roboto_400Regular, Roboto_500Medium, Roboto_700Bold } from '@
 import { THEME } from './src/styles/theme';
 
 import { SignIn } from './src/screens/SignIn';
-import { Loading } from './src/components/loading';
+import { Loading } from './src/components/Loading';
 
 export default function App() {
   const [fontsLoaded] = useFonts({ Roboto_400Regular, Roboto_500Medium, Roboto_700Bold })
