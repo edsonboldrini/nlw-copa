@@ -1,13 +1,13 @@
-import { Button, Text, IButtonProps } from 'native-base';
+import { Button as ButtonNativeBase, Text, IButtonProps } from 'native-base';
 
-interface CustomButtonProps extends IButtonProps {
+interface ButtonProps extends IButtonProps {
   title: string;
   type?: 'PRIMARY' | 'SECONDARY'
 }
 
-export function CustomButton({ title, type = 'PRIMARY', ...rest }: CustomButtonProps) {
+export function Button({ title, type = 'PRIMARY', ...rest }: ButtonProps) {
   return (
-    <Button
+    <ButtonNativeBase
       w="full"
       h={14}
       rounded="sm"
@@ -30,6 +30,6 @@ export function CustomButton({ title, type = 'PRIMARY', ...rest }: CustomButtonP
       >
         {title}
       </Text>
-    </Button>
+    </ButtonNativeBase>
   )
 }

@@ -1,7 +1,7 @@
 import { Heading, VStack, Text } from 'native-base';
 
 import Logo from '../assets/logo.svg'
-import { CustomButton } from '../components/Button';
+import { Button } from '../components/Button';
 import { Header } from '../components/Header';
 import { Input } from '../components/Input';
 
@@ -19,7 +19,7 @@ export function New() {
         <Logo />
 
         <Heading fontFamily="heading" color="white" fontSize="xl" my={8} textAlign="center">
-          Crie seu próprio bolão da copa{'\n'}e compartilhe com os amigos
+          Crie seu próprio bolão da copa e compartilhe com os amigos
         </Heading>
 
         <Input
@@ -27,7 +27,7 @@ export function New() {
           placeholder="Qual o nome do seu bolão"
         />
 
-        <CustomButton
+        <Button
           title="CRIAR MEU BOLÃO"
         />
 

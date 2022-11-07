@@ -3,7 +3,7 @@ import { Fontisto } from '@expo/vector-icons'
 import { useAuth } from '../hooks/useAuth';
 
 import Logo from '../assets/logo.svg'
-import { CustomButton } from '../components/Button';
+import { Button } from '../components/Button';
 
 export function SignIn() {
   const { signIn, user } = useAuth()
@@ -15,7 +15,7 @@ export function SignIn() {
       p={7}
     >
       <Logo width={212} height={40} />
-      <CustomButton
+      <Button
         title="ENTRAR COM O GOOGLE"
         type="SECONDARY"
         leftIcon={<Icon as={Fontisto} name="google" color="white" size="md" />}
@@ -27,8 +27,7 @@ export function SignIn() {
         textAlign="center"
         mt={4}
       >
-        Não utilizamos nenhuma informação além{'\n'}
-        do seu e-mail para criação de sua conta.
+        Não utilizamos nenhuma informação além do seu e-mail para criação de sua conta.
       </Text>
     </Center>
   )
