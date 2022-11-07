@@ -9,8 +9,12 @@ export function SignIn() {
   const { signIn, user } = useAuth()
 
   return (
-    <Center flex={1} backgroundColor="gray.900">
-      <Logo />
+    <Center
+      flex={1}
+      backgroundColor="gray.900"
+      p={7}
+    >
+      <Logo width={212} height={40} />
       <CustomButton
         title="ENTRAR COM O GOOGLE"
         type="SECONDARY"
