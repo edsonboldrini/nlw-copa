@@ -30,6 +30,7 @@ model User {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+  googleId  String?  @unique
   name      String
   email     String
   avatarUrl String?
