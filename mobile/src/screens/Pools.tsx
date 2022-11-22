@@ -7,7 +7,7 @@ import { Header } from '../components/Header'
 import { http } from '../services/http'
 import { useCallback, useState } from 'react'
 import { Loading } from '../components/Loading'
-import { PoolCard, PoolPros as PoolCardProps } from '../components/PoolCard'
+import { PoolCard, PoolCardProps } from '../components/PoolCard'
 import { EmptyPoolList } from '../components/EmptyPoolList'
 
 export function Pools() {
@@ -67,7 +67,12 @@ export function Pools() {
         <FlatList
           data={poolsList}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <PoolCard data={item} />}
+          renderItem={({ item }) =>
+            <PoolCard
+              data={item}
+              onPress={() => navigate('details', { id: item.id })}
+            />
+          }
           px={5}
           showsVerticalScrollIndicator={false}
           _contentContainerStyle={{ pb: 10 }}
