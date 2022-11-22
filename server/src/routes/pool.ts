@@ -1,7 +1,8 @@
-import { FastifyInstance } from "fastify"
+import { FastifyInstance, FastifyRequest } from "fastify"
 import { z } from 'zod'
 import { prisma } from "../lib/prisma"
 import ShortUniqueId from 'short-unique-id'
+import { authenticate } from "../plugins/authenticate"
 
 export async function poolRoutes(fastify: FastifyInstance) {
   fastify.get('/pools/count', async () => {
@@ -20,13 +21,170 @@ export async function poolRoutes(fastify: FastifyInstance) {
     const generate = new ShortUniqueId({ length: 6 })
     const code = String(generate()).toUpperCase()
 
-    await prisma.pool.create({
-      data: {
-        title,
-        code,
+    let ownerId = null
+
+    try {
+      await request.jwtVerify()
+
+      await prisma.pool.create({
+        data: {
+          title,
+          code,
+          ownerId: request.user.sub,
+
+          participants: {
+            create: {
+              userId: request.user.sub
+            }
+          }
+        }
+      })
+    } catch (e) {
+      console.log('user not logged')
+      await prisma.pool.create({
+        data: {
+          title,
+          code,
+        }
+      })
+    }
+
+    return reply.status(201).send({ code })
+  })
+
+  fastify.post('/pools/:code/join', {
+    onRequest: [authenticate]
+  }, async (request, reply) => {
+
+    const joinPoolParams = z.object({
+      code: z.string()
+    })
+
+    const { code } = joinPoolParams.parse(request.params)
+
+    const pool = await prisma.pool.findUnique({
+      where: {
+        code
+      },
+      include: {
+        participants: {
+          where: {
+            userId: request.user.sub
+          }
+        }
       }
     })
 
-    return reply.status(201).send({ code })
+    if (!pool) {
+      return reply.status(404).send({
+        message: 'Pool not found'
+      })
+    }
+
+    if (pool.participants.length > 0) {
+      return reply.status(400).send({
+        message: 'You already joined this pool'
+      })
+    }
+
+    if (!pool.ownerId) {
+      await prisma.pool.update({
+        where: {
+          id: pool.id
+        },
+        data: {
+          ownerId: request.user.sub
+        }
+      })
+    }
+
+    await prisma.participant.create({
+      data: {
+        poolId: pool.id,
+        userId: request.user.sub
+      }
+    })
+
+    return reply.status(201).send()
+  })
+
+  fastify.get('/pools', {
+    onRequest: [authenticate]
+  }, async (request, reply) => {
+    const pools = await prisma.pool.findMany({
+      where: {
+        participants: {
+          some: {
+            userId: request.user.sub
+          }
+        }
+      },
+      include: {
+        _count: {
+          select: {
+            participants: true
+          }
+        },
+        participants: {
+          take: 4,
+          include: {
+            user: {
+              select: {
+                avatarUrl: true,
+              }
+            }
+          }
+        },
+        owner: {
+          select: {
+            id: true,
+            name: true
+          },
+        }
+      }
+    })
+
+    return { pools }
+  })
+
+  fastify.get('/pools/:id', {
+    onRequest: [authenticate]
+  }, async (request, reply) => {
+    const joinPoolParams = z.object({
+      id: z.string()
+    })
+
+    const { id } = joinPoolParams.parse(request.params)
+
+    const pool = await prisma.pool.findUnique({
+      where: {
+        id
+      },
+      include: {
+        _count: {
+          select: {
+            participants: true
+          }
+        },
+        participants: {
+          take: 4,
+          include: {
+            user: {
+              select: {
+                avatarUrl: true,
+              }
+            }
+          }
+        },
+        owner: {
+          select: {
+            id: true,
+            name: true
+          },
+        }
+      }
+    })
+
+    return { pool }
   })
 }

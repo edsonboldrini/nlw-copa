@@ -34,7 +34,7 @@ async function main() {
       guesses: {
         create: {
           firstTeamPoints: 2,
-          SecondTeamPoints: 0,
+          secondTeamPoints: 0,
           participant: {
             connect: {
               userId_poolId: {
