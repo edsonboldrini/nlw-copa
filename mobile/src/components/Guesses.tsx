@@ -4,12 +4,14 @@ import { useEffect, useState } from 'react';
 import { http } from '../services/http'
 import { Game, GameProps } from '../components/Game'
 import { Loading } from '../components/Loading'
+import { EmptyMyPoolList } from '../components/EmptyMyPoolList'
 
 interface Props {
   poolId: string;
+  code: string;
 }
 
-export function Guesses({ poolId }: Props) {
+export function Guesses({ poolId, code }: Props) {
   const [isLoading, setIsLoading] = useState(true)
   const [games, setGames] = useState<GameProps[]>([])
 
@@ -96,6 +98,11 @@ export function Guesses({ poolId }: Props) {
       px={5}
       showsVerticalScrollIndicator={false}
       _contentContainerStyle={{ pb: 100 }}
+      ListEmptyComponent={() =>
+        <EmptyMyPoolList
+          code={code}
+        />
+      }
     />
   );
 }

@@ -25,7 +25,7 @@ export function Details() {
   const toast = useToast()
   const { id } = route.params as DetailsParams
 
-  async function handleCodeShare() {
+  async function handleShareCode() {
     Share.share({
       message: poolDetails.code
     })
@@ -68,7 +68,7 @@ export function Details() {
         title={poolDetails.title}
         showBackButton
         showShareButton
-        onShare={() => handleCodeShare()}
+        onShare={() => handleShareCode()}
       />
 
       {
@@ -90,10 +90,12 @@ export function Details() {
 
             </HStack>
 
-            <Guesses poolId={poolDetails.id} />
+            <Guesses poolId={poolDetails.id} code={poolDetails.code} />
           </VStack>
           :
-          <EmptyMyPoolList code={poolDetails.code} />
+          <EmptyMyPoolList
+            code={poolDetails.code}
+          />
       }
 
     </VStack>
