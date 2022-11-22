@@ -1,6 +1,5 @@
 import { Heading, VStack, Text, useToast } from 'native-base';
 import { useState } from 'react';
-import { Alert } from 'react-native';
 
 import Logo from '../assets/logo.svg'
 import { Button } from '../components/Button';
@@ -31,7 +30,7 @@ export function New() {
       })
 
       toast.show({
-        title: 'Informe um nome para o seu bolão',
+        title: 'Bolão criado com sucesso!',
         placement: 'top',
         bgColor: 'green.500'
       })
@@ -41,7 +40,7 @@ export function New() {
       console.log(error)
 
       toast.show({
-        title: 'Bolão criado com sucesso!',
+        title: 'Erro ao criar bolão',
         placement: 'top',
         bgColor: 'red.500'
       })

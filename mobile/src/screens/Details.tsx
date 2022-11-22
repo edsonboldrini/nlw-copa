@@ -3,9 +3,10 @@ import { useRoute } from '@react-navigation/native'
 import { Heading, useToast, VStack, Text, HStack } from 'native-base'
 import { Share } from 'react-native'
 
+import { http } from '../services/http'
 import { Header } from '../components/Header'
 import { Loading } from '../components/Loading'
-import { http } from '../services/http'
+import { Guesses } from '../components/Guesses'
 import { PoolCardProps } from '../components/PoolCard'
 import { PoolHeader } from '../components/PoolHeader'
 import { EmptyMyPoolList } from '../components/EmptyMyPoolList'
@@ -88,6 +89,8 @@ export function Details() {
               />
 
             </HStack>
+
+            <Guesses poolId={poolDetails.id} />
           </VStack>
           :
           <EmptyMyPoolList code={poolDetails.code} />

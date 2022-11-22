@@ -12,7 +12,7 @@ import { EmptyPoolList } from '../components/EmptyPoolList'
 
 export function Pools() {
   const [isLoading, setIsLoading] = useState(false)
-  const [poolsList, setPoolsList] = useState<PoolCardProps[]>([])
+  const [pools, setPools] = useState<PoolCardProps[]>([])
 
   const { navigate } = useNavigation()
   const toast = useToast()
@@ -21,7 +21,7 @@ export function Pools() {
     try {
       setIsLoading(true)
       const response = await http.get('/pools')
-      setPoolsList(response.data.pools)
+      setPools(response.data.pools)
     } catch (error) {
       console.log(error)
       toast.show({
@@ -65,7 +65,7 @@ export function Pools() {
       {isLoading ?
         <Loading /> :
         <FlatList
-          data={poolsList}
+          data={pools}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) =>
             <PoolCard
@@ -79,8 +79,6 @@ export function Pools() {
           ListEmptyComponent={() => <EmptyPoolList />}
         />
       }
-
-
 
     </VStack>
   )
