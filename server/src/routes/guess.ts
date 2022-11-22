@@ -83,13 +83,6 @@ export async function guessRoutes(fastify: FastifyInstance) {
         participantId: participant.id,
         firstTeamPoints,
         secondTeamPoints,
-      },
-      include: {
-        game: {
-          select: {
-
-          }
-        }
       }
     })
 
